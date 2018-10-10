@@ -30,9 +30,9 @@ namespace keepr.Repositories
         public Vault Create(Vault vault)
         {
             int id = _db.ExecuteScalar<int>(@"
-            INSERT INTO vaults (name,description)
+            INSERT INTO vaults (name, description)
             VALUES (@Name, @Description);
-            SELECT LATS_INSERT_ID();", vault
+            SELECT LAST_INSERT_ID();", vault
             );
             vault.Id = id;
             return vault;
@@ -48,24 +48,18 @@ namespace keepr.Repositories
         }
 
         // DELETE VAULT
-        public Vault Delete(Vault vault)
+        public bool Delete(int id)
         {
-            _db.Execute("DELETE FROM vaults WHERE id = @Id", vault);
-            return vault;
+            int successfulDelete = _db.Execute("DELETE FROM vaults WHERE id = @id", new { id });
+            return successfulDelete == 1;
         }
 
         // GET VAULT BY USER ID
         public IEnumerable<Vault> GetVaultByUserId(string id)
         {
             return _db.Query<Vault>(@"
-            SELECT * FROM uservaults
-            INNER JOIN vaults ON vault.id = uservaults.vaultId
+            SELECT * FROM vaults
             WHERE userId = @id", new { id });
-        }
-
-        public int Delete(int id)
-        {
-            return _db.Execute("DELETE FROM vaults WHERE id = @id", new { id });
         }
     }
 }

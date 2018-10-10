@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using keepr.Models;
 using Dapper;
+using System;
 
 namespace keepr.Repositories
 {
@@ -30,8 +31,8 @@ namespace keepr.Repositories
         public Keep Create(Keep keep)
         {
             int id = _db.ExecuteScalar<int>(@"
-             INSERT INTO keeps (name, description) 
-            VALUES (@Name, @Description);
+             INSERT INTO keeps (name, description, img, userid, isprivate) 
+            VALUES (@Name, @Description, @Img, @UserId, @IsPrivate);
             SELECT LAST_INSERT_ID();", keep
             );
             keep.Id = id;
@@ -42,30 +43,30 @@ namespace keepr.Repositories
         public Keep Update(Keep keep)
         {
             _db.Execute(@"UPDATE keeps
-            SET name = @Name, description = @Description
+            SET name = @Name, description = @Description, isprivate = @IsPrivate
             WHERE id = @Id;", keep);
             return keep;
         }
 
         // DELETE KEEP
-        public Keep Delete(Keep keep)
+        public bool Delete(int id)
         {
-            _db.Execute("DELETE FROM keeps WHERE id = @Id", keep);
-            return keep;
+            int successfulDelete = _db.Execute("DELETE FROM keeps WHERE id = @id", new { id });
+            return successfulDelete == 1;
         }
 
         // GET KEEP BY USER ID
         public IEnumerable<Keep> GetKeepByUserId(string id)
         {
             return _db.Query<Keep>(@"
-            SELECT * FROM userkeeps
-            INNER JOIN keeps ON keeps.id = userkeeps.keepId
+            SELECT * FROM keeps
             WHERE userId = @id", new { id });
         }
 
-        public int Delete(int id)
+        // GET PUBLIC KEEPS
+        public IEnumerable<Keep> GetPublicKeeps()
         {
-            return _db.Execute("DELETE FROM keeps WHERE id = @id", new { id });
+            return _db.Query<Keep>(" SELECT * FROM keeps WHERE isprivate = 0");
         }
     }
 }

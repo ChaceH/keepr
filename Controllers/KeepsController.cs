@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using keepr.Models;
 using keepr.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace keepr.Controllers
@@ -12,6 +13,7 @@ namespace keepr.Controllers
     public class KeepsController : Controller
     {
         KeepsRepository _repo;
+        private readonly UserManager<User> manager;
         public KeepsController(KeepsRepository repo)
         {
             _repo = repo;
@@ -25,14 +27,19 @@ namespace keepr.Controllers
 
         [Authorize]
         [HttpPost]
-        public Keep Post([FromBody] Keep keep)
+       public Keep Post([FromBody] Keep rawKeep)
+       {
+           if (!ModelState.IsValid) throw new Exception("Not a valid Keep.");
+           Keep keep = _repo.Create(rawKeep);
+           if (keep == null) throw new Exception("Error inserting keep into the db.");
+           return keep;
+       }
+
+        [Authorize]
+       [HttpDelete("{id}")]
+        public bool Delete(int id)
         {
-            if (ModelState.IsValid)
-            {
-                keep = new Keep(keep.Name, keep.Description);
-                return _repo.Create(keep);
-            }
-            throw new Exception("INVALID KEEP");
+            return _repo.Delete(id);
         }
-    }
-}
+   }
+};

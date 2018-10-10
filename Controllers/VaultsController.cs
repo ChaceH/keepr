@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using keepr.Models;
 using keepr.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace keepr.Controllers
@@ -12,6 +13,7 @@ namespace keepr.Controllers
     public class VaultsController : Controller
     {
         VaultsRepository _repo;
+        private readonly UserManager<User> manager;
         public VaultsController(VaultsRepository repo)
         {
             _repo = repo;
@@ -25,14 +27,19 @@ namespace keepr.Controllers
 
         [Authorize]
         [HttpPost]
-        public Vault Post([FromBody] Vault vault)
+       public Vault Post([FromBody] Vault rawVault)
+       {
+           if (!ModelState.IsValid) throw new Exception("Invalid Vault.");
+           Vault vault = _repo.Create(rawVault);
+           if (vault == null) throw new Exception("Error inserting Vault into the db.");
+           return vault;
+       }
+
+        [Authorize]
+       [HttpDelete("{id}")]
+        public bool Delete(int id)
         {
-            if (ModelState.IsValid)
-            {
-                vault = new Vault(vault.Name, vault.Description);
-                return _repo.Create(vault);
-            }
-            throw new Exception("INVALID VAULT");
+            return _repo.Delete(id);
         }
-    }
-}
+   }
+};

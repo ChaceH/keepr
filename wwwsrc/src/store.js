@@ -19,14 +19,23 @@ let api = Axios.create({
 
 export default new Vuex.Store({
   state: {
-    user: {}
+    user: {},
+    keeps: [],
+    vaults: []
   },
   mutations: {
     setUser(state, user) {
       state.user = user
+    },
+    setKeeps(state, keeps) {
+      state.keeps = keeps
+    },
+    setVaults(state, vaults) {
+      state.vaults = vaults
     }
   },
   actions: {
+    // AUTH
     register({ commit, dispatch }, newUser) {
       auth.post('register', newUser)
         .then(res => {
@@ -56,6 +65,72 @@ export default new Vuex.Store({
         .catch(e => {
           console.log('Login Failed')
         })
-    }
+    },
+    logout({ commit, dispatch }) {
+      auth.delete('logout')
+        .then(res => {
+          commit('setUser', {})
+          router.push({ name: 'login' })
+        })
+    },
+    createAccount({ commit, dispatch }) {
+      auth.delete('logout')
+        .then(res => {
+          commit('setUser', {})
+          router.push({ name: 'login' })
+        })
+    },
+
+    // KEEPS
+    getKeeps({ commit, dispatch }) {
+      api.get('keeps')
+        .then(res => {
+          commit('setKeeps', res.data)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    addKeep({ commit, dispatch}, keepData) {
+      api.post('keeps',keepData)
+      .then(res => {
+        dispatch('getKeeps')
+      })
+    },
+    deleteKeep({ commit, dispatch }, keepId) {
+      api.delete('keeps/'+ keepId)
+        .then(res => {
+          dispatch('getKeeps')
+        })
+        .catch(e => {
+          console.log('error:', e)
+        })
+    },
+
+    // VAULTS
+    getVaults({ commit, dispatch }, id) {
+      api.get('vaults')
+        .then(res => {
+          commit('setVaults', res.data)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    addVault({ commit, dispatch}, vaultData) {
+      api.post('vaults',vaultData)
+      .then(res => {
+        dispatch('getVaults')
+      })
+    },
+    deleteVault({ commit, dispatch }, vaultId) {
+      api.delete('vaults/'+ vaultId)
+        .then(res => {
+          dispatch('getVaults')
+        })
+        .catch(e => {
+          console.log('error:', e)
+        })
+    },
   }
 })
