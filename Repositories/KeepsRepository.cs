@@ -43,7 +43,7 @@ namespace keepr.Repositories
         public Keep Update(Keep keep)
         {
             _db.Execute(@"UPDATE keeps
-            SET name = @Name, description = @Description, isprivate = @IsPrivate
+            SET name = @Name, description = @Description, isprivate = @IsPrivate, views = @Views, shares = @Shares
             WHERE id = @Id;", keep);
             return keep;
         }

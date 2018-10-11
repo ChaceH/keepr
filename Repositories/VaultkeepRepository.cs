@@ -32,10 +32,10 @@ namespace keepr.Repositories
     }
 
     //GET VaultKeep BY ID
-    // public Vaultkeep GetByID(int id)
-    // {
-    //   return _db.Query<Vaultkeep>("SELECT * FROM vaultkeeps WHERE id = @id;", new { id }).FirstOrDefault();
-    // }
+    public IEnumerable<Vaultkeep> GetAllUserVaultKeeps(string id)
+    {
+      return _db.Query<Vaultkeep>("SELECT * FROM vaultkeeps WHERE id = @id;", new { id });
+    }
 
     //CREATE VaultKeep
     public Vaultkeep Create(Vaultkeep vaultkeep)

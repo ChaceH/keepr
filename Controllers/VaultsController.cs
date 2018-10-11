@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace keepr.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VaultsController : Controller
@@ -25,11 +26,23 @@ namespace keepr.Controllers
             return _repo.GetAll();
         }
 
-        [Authorize]
+        [HttpGet("byuser/{id}")]
+        public IEnumerable<Vault> Get(string id)
+        {
+            return _repo.GetByUserId(id);
+        }
+
+        [HttpGet("{id}/keeps")]
+        public IEnumerable<Keep> Get(int vaultId)
+        {
+            return _repo.GetKeeps(vaultId);
+        }
+
         [HttpPost]
        public Vault Post([FromBody] Vault rawVault)
        {
            if (!ModelState.IsValid) throw new Exception("Invalid Vault.");
+           rawVault.UserId = HttpContext.User.Identity.Name;
            Vault vault = _repo.Create(rawVault);
            if (vault == null) throw new Exception("Error inserting Vault into the db.");
            return vault;

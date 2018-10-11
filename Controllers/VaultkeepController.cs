@@ -22,7 +22,7 @@ namespace keepr.Controllers
     [HttpGet]
     public IEnumerable<Vaultkeep> Get()
     {
-      return _repo.GetAll();
+      return _repo.GetAllUserVaultKeeps(HttpContext.User.Identity.Name);
     }
 
     //gets keeps by vault id
@@ -39,7 +39,6 @@ namespace keepr.Controllers
     //   return _repo.GetByID(id);
     // }
 
-    [Authorize]
     [HttpPost]
     public Vaultkeep Post([FromBody] Vaultkeep vaultkeep)
     {

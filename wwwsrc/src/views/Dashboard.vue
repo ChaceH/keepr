@@ -45,7 +45,7 @@ export default {
     if (!this.$store.state.user.id) {
       this.$router.push({ name: "login" });
     }
-    this.$store.dispatch("getVaults");
+    this.$store.dispatch("getVaultsByUserId", this.$store.state.user.id);
   },
   data() {
     return {
