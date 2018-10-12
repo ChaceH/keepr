@@ -7,9 +7,11 @@
            <h1>KEEPR</h1>
        <v-spacer></v-spacer>
        <v-toolbar-items v-if="user.id">
+         <h5>Dashboard </h5>
            <v-btn icon @click="dashboard()">
                <v-icon>far fa-user-circle</v-icon>
            </v-btn>
+          <h5>Logout</h5>
            <v-btn icon @click="logout()">
                <v-icon>fa-sign-out-alt</v-icon>
            </v-btn>
