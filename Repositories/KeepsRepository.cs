@@ -21,6 +21,10 @@ namespace keepr.Repositories
             return _db.Query<Keep>("SELECT * FROM keeps");
         }
 
+        public int GetVaultCount(int keepId)
+        {
+            return _db.ExecuteScalar<int>("SELECT count(*) WHERE keepId = @keepId ", new {keepId});
+        }
         // GET KEEPS BY ID
         public Keep GetById(int id)
         {

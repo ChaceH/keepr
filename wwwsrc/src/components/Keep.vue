@@ -7,17 +7,17 @@
     <div class="container">
       <img :src="keepData.img" alt="" class="image">
       <div class="overlay">
-        <a href="#" class="icon" title="User Profile">
+        <div class="icon">
           <button class="btn button" @click="view()"><i class="icon-color far fa-eye">:{{keepData.views}}</i></button>
           <button class="btn button" @click="share()"><i class="icon-color fas fa-share-square">:{{keepData.shares}}</i></button>
           <button class="btn button" @click="showModal()"><i class="icon-color far fa-save">:{{keepData.keeps}}</i></button>
-        </a>
+        </div>
       </div>
     </div>
 
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div :id="'myModal'+ keepData.id" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content container-fluid">
@@ -29,13 +29,13 @@
   </div>
   <div class="modal-body row">
     <div class="col">
-      <select style="height: 30px; color: white;">
-        <option style="color: black;">Click to Select Vault</option>
-        <option>
-          
+      <select v-model="selectedVaultId" style="background-color: white; height: 30px; color: black;">
+        <option disabled value="" style="color: black;">Select Vault</option>
+        <option style="color: black;" v-for="vault in vaults" :value="vault.id" :key="vault.id">
+          {{vault.name}}
         </option>
       </select>
-      <button class="btn btn-success btn-sm" style="height: 30px">Save</button>
+      <button class="btn btn-success btn-sm" @click="save()" style="height: 30px">Save</button>
       </div>
   </div>
 </div>
@@ -51,14 +51,26 @@
 
 
 <script>
+import vault from "@/components/Vault.vue";
+
 export default {
   name: "keep",
   props: ["keepData"],
   mounted() {
-    //blocks users not logged in
-    // if (!this.$store.state.user.id) {
-    //   this.$router.push({ name: "login" });
-    // }
+    if (this.$store.state.user.id) {
+    this.$store.dispatch("getVaultsByUserId", this.$store.state.user.id);
+    }
+    console.log(this.keepData.id)
+  },
+  data() {
+      return {
+        selectedVaultId: ""
+      };
+    },
+  computed: {
+    vaults() {
+      return this.$store.state.vaults;
+    }
   },
   methods: {
     deleteKeep() {
@@ -70,16 +82,19 @@ export default {
     share() {
       this.$store.dispatch("addKeepShare", this.keepData.id);
     },
-    save(vaultId) {
-      this.$store.dispatch("addKeepToVault", {
-        keepId: this.keepData.id,
-        vaultId: vaultId
-      });
+    save() {
+      console.log(this.keepData.id)
+      if(this.selectedVaultId){
+        this.$store.dispatch("addKeepToVault", {
+          keepId: this.keepData.id,
+          vaultId: this.selectedVaultId
+        });
+      }
     },
     showModal() {
-      var modal = document.getElementById("myModal");
-      var btn = document.getElementById("myBtn");
-      var span = document.getElementsByClassName("close")[0];
+      console.log(this.keepData.id)
+      var modal = document.getElementById("myModal"+this.keepData.id);
+      var span = document.getElementsByClassName("close")[this.$store.state.keeps.findIndex(keep => keep.id === this.keepData.id)];
       modal.style.display = "block";
       span.onclick = function() {
         modal.style.display = "none";
@@ -145,16 +160,16 @@ export default {
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 .modal-header {
@@ -164,26 +179,26 @@ export default {
 
 /* Modal Content/Box */
 .modal-content {
-    background-color: black;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    height: 15%;
-    width: 30%; /* Could be more or less, depending on screen size */
+  background-color: black;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  height: 15%;
+  width: 30%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>

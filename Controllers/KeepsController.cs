@@ -26,6 +26,12 @@ namespace keepr.Controllers
             return _repo.GetAll();
         }
 
+        [HttpGet("{id}/vaultCount")]
+        public int GetVaultCount(int id)
+        {
+            return _repo.GetVaultCount(id);
+        }
+
         [Authorize]
         [HttpPost]
         public Keep Post([FromBody] Keep rawKeep)

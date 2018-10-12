@@ -21,11 +21,39 @@
       </div>
       </div>
       <div class="row" style="margin-top: 75px;">
-      <div class="col-sm-4" v-for="vault in vaults" :key="vault._id" >
+      <div class="col-sm-4" v-for="vault in vaults" :key="vault.id" @click="selectVault(vault.id)">
         <!-- keep component here -->
         <vault :vaultData='vault' />
       </div>
+      </div>
+      <div v-if="showMyKeeps">
+        <div class="row" style="margin-top: 75px;">
+          <div class="col">
+          <h2>User Keeps</h2>
+          </div>
+          </div>
+          <div class="row" style="margin-top: 75px;">
+      <div class="col-sm-4" v-for="keep in keeps" :key="keep.id" >
+        <!-- keep component here -->
+        <keep :keepData='keep' />
+      </div>
     </div>
+      </div>
+      <div v-else>
+        <button @click="showMyKeeps = true">Show User Keeps</button>
+        <div class="row" style="margin-top: 75px;">
+          <div class="col">
+          <h2>Vault Keeps</h2>
+          </div>
+          </div>
+        <div class="row" style="margin-top: 75px;">
+      <div class="col-sm-4" v-for="keep in selectedVaultKeeps" :key="keep.id" >
+        <!-- keep component here -->
+        <keep :keepData='keep' />
+      </div>
+    </div>
+      </div>
+    
     </div>
 </template>
 
@@ -61,17 +89,29 @@ export default {
     };
   },
   computed: {
+    showMyKeeps() {
+      console.log(this.$store.state.showMyKeeps);
+      return this.$store.state.showMyKeeps;
+    },
     keeps() {
+      console.log(this.$store.state.keeps);
+      console.log(this.$store.state.user);
       return this.$store.state.keeps;
     },
     vaults() {
       return this.$store.state.vaults;
+    },
+    selectedVaultKeeps() {
+      return this.$store.state.selectedVaultkeeps;
     }
   },
   methods: {
     addKeep() {
       this.$store.dispatch("addKeep", this.newKeep);
       this.newKeep = { img: "", name: "", description: "" };
+    },
+    selectVault(id) {
+      this.$store.dispatch("getVaultKeeps", id);
     },
     addVault() {
       this.$store.dispatch("addVault", this.newVault);

@@ -32,7 +32,7 @@ namespace keepr.Controllers
             return _repo.GetByUserId(id);
         }
 
-        [HttpGet("{id}/keeps")]
+        [HttpGet("{vaultId}/keeps")]
         public IEnumerable<Keep> Get(int vaultId)
         {
             return _repo.GetKeeps(vaultId);

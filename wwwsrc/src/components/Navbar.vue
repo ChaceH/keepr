@@ -15,7 +15,7 @@
        </v-toolbar-items>
        <v-toolbar-items v-else>
            <v-layout full-height align-center>
-               <v-btn flat round large @click="createAccount()" class="white--text">create accout</v-btn>
+               <v-btn flat round large @click="createAccount()" class="white--text">Login / Create Account</v-btn>
            </v-layout>
        </v-toolbar-items>
    </v-toolbar>

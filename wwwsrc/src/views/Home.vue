@@ -2,9 +2,9 @@
   <div class="home container-fluid">
     <navigation-bar/>
       <div class="row" style="margin-top: 75px;">
-      <div class="col-sm-4" v-for="keep in keeps" :key="keep._id" >
+      <div class="col-sm-4" v-for="keep in keeps" :key="keep.id" >
         <!-- keep component here -->
-        <keep :keepData='keep' />
+        <keep :keepData="keep" />
       </div>
     </div>
   </div>
