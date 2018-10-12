@@ -3,7 +3,8 @@
        <v-btn flat href="#" icon @click="home()"> <!-- route to top of page -->
            <v-icon color="white" large>fas fa-skull</v-icon>
        </v-btn>
-           <p>KEEPR</p>
+       <v-spacer></v-spacer>
+           <h1>KEEPR</h1>
        <v-spacer></v-spacer>
        <v-toolbar-items v-if="user.id">
            <v-btn icon @click="dashboard()">
