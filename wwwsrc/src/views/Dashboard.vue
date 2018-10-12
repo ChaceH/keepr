@@ -21,6 +21,11 @@
       </div>
       </div>
       <div class="row" style="margin-top: 75px;">
+          <div class="col">
+          <h2>User Vaults</h2>
+          </div>
+          </div>
+      <div class="row" style="margin-top: 15px;">
       <div class="col-sm-4" v-for="vault in vaults" :key="vault.id" @click="selectVault(vault.id)">
         <!-- vault component here -->
         <vault :vaultData='vault' />
@@ -32,7 +37,7 @@
           <h2>User Keeps</h2>
           </div>
           </div>
-          <div class="row" style="margin-top: 75px;">
+          <div class="row" style="margin-top: 15px;">
       <div class="col-sm-4" v-for="keep in keeps" :key="keep.id" >
         <!-- keep component here -->
         <keep :keepData='keep' />
@@ -45,7 +50,7 @@
           <h2>Vault Keeps</h2>
           </div>
           </div>
-        <div class="row" style="margin-top: 75px;">
+        <div class="row" style="margin-top: 15px;">
       <div class="col-sm-4" v-for="keep in selectedVaultKeeps" :key="keep.id" >
         <!-- keep component here -->
         <keep :keepData='keep' />
