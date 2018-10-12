@@ -1,7 +1,6 @@
 <template>
 <div class="keep card " style="box-shadow: 3px 3px 3px black; margin-bottom: 2rem;">
   <div class="top-buttons">
-    <button class="btn button"><i class="far fa-edit"></i></button>
     <button class="btn button" @click="deleteKeep()"><i class="fa fa-trash"></i></button>
   </div>
     <div class="container">
@@ -60,7 +59,6 @@ export default {
     if (this.$store.state.user.id) {
     this.$store.dispatch("getVaultsByUserId", this.$store.state.user.id);
     }
-    console.log(this.keepData.id)
   },
   data() {
       return {
@@ -83,7 +81,6 @@ export default {
       this.$store.dispatch("addKeepShare", this.keepData.id);
     },
     save() {
-      console.log(this.keepData.id)
       if(this.selectedVaultId){
         this.$store.dispatch("addKeepToVault", {
           keepId: this.keepData.id,
@@ -92,7 +89,6 @@ export default {
       }
     },
     showModal() {
-      console.log(this.keepData.id)
       var modal = document.getElementById("myModal"+this.keepData.id);
       var span = document.getElementsByClassName("close")[this.$store.state.keeps.findIndex(keep => keep.id === this.keepData.id)];
       modal.style.display = "block";

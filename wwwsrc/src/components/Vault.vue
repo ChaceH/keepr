@@ -3,7 +3,6 @@
         <button class="btn" @click="deleteVault()" style="background-color: transparent; height: 3vh; width: 2vw;"><i class="fa fa-trash"></i></button>
         <h2>{{vaultData.name}}</h2>
         <p>{{vaultData.description}}</p>
-        <button class="btn btn-primary">Open Vault</button>
     </div>
 </template>
 
