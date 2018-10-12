@@ -1,5 +1,5 @@
 <template>
-    <div class="vault card">
+    <div class="vault card" style="box-shadow: 3px 3px 3px black; margin-bottom: 2rem;">
         <button class="btn" @click="deleteVault()" style="background-color: transparent; height: 3vh; width: 2vw;"><i class="fa fa-trash"></i></button>
         <h2>{{vaultData.name}}</h2>
         <p>{{vaultData.description}}</p>

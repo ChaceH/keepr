@@ -2,7 +2,7 @@
     <div class="dashboard">
         <navigation-bar/>
         <div class="row" style="margin-top: 75px;">
-          <div class="card col-sm-6">
+          <div class="card col-sm-5 offset-1" style="box-shadow: 3px 3px 3px black; margin-bottom: 2rem;">
         <h3>Create a Keep</h3>
         <form style="" @submit.prevent="addKeep">
         <input type="text" placeholder="title" v-model="newKeep.name" required>
@@ -11,7 +11,7 @@
         <button class="btn btn-success" type="submit" style="height: 3vh; width: 10vw; color: black;">Post Keep</button>
       </form>
       </div>
-        <div class="card col-sm-6">
+        <div class="card col-sm-5" style="box-shadow: 3px 3px 3px black; margin-bottom: 2rem;">
         <h3>Create a Vault</h3>
         <form style="" @submit.prevent="addVault">
         <input type="text" placeholder="title" v-model="newVault.name" required>
